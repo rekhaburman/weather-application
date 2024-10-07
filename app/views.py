@@ -6,7 +6,6 @@ def home(request):
     # Default city
     city = 'Kolkata'
 
-    # If a city is provided in the POST request, use it
     if request.method == 'POST' and 'city' in request.POST:
         city = request.POST['city']
 
@@ -19,14 +18,12 @@ def home(request):
         data = requests.get(url, PARAMS).json()
 
         # Extracting relevant data from the API response
-        description = data['weather'][0]['description']  # Weather description
-        icon = data['weather'][0]['icon']  # Weather icon
-        temp = data['main']['temp']  # Temperature in Celsius
+        description = data['weather'][0]['description'] 
+        icon = data['weather'][0]['icon']  
+        temp = data['main']['temp'] 
 
-        # Get today's date and format it nicely
         day = datetime.datetime.today().strftime('%A, %d %B %Y')
 
-        # Render the 'index.html' with weather details
         return render(request, 'index.html', {
             'description': description,
             'icon': icon,
@@ -36,12 +33,12 @@ def home(request):
         })
 
     except (KeyError, IndexError, requests.exceptions.RequestException):
-        # Handle cases where the API returns an error or the city is invalid
+      
         return render(request, 'index.html', {
             'description': 'Data not available',
             'icon': '',
             'temp': 'N/A',
             'day': datetime.datetime.today().strftime('%A, %d %B %Y'),
             'city': city,
-            'exception_occurred': True,  # Use this flag in your template to show an error message
+            'exception_occurred': True,
         })
